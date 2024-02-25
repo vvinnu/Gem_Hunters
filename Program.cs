@@ -145,6 +145,17 @@ public class Board
                 // Invalid direction
                 return false;
         }
+        if (newPosition.X < 0 || newPosition.X >= 6 || newPosition.Y < 0 || newPosition.Y >= 6)
+        {
+            return false;
+        }
+
+        if (Grid[newPosition.X, newPosition.Y].Occupant == "O")
+        {
+            return false;
+        }
+
+        player.Position = newPosition;
         return true;
 
     }
@@ -194,7 +205,16 @@ public class Game
             Console.WriteLine("\nCurrent Player: " + CurrentTurn.Name);
             Console.Write("\nEnter move (U/D/L/R): ");
             char move = char.ToUpper(Console.ReadKey().KeyChar);
-            Board.IsValidMove(CurrentTurn,move);
+            if (Board.IsValidMove(CurrentTurn, move))
+            {
+                Console.WriteLine("\nMove successful!");
+            }
+            else
+            {
+                Console.WriteLine("\nInvalid move! Try again.");
+                continue;
+            }
+
             CurrentTurn.Move(move);
 
             TotalTurns++;
