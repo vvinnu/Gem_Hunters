@@ -2,6 +2,7 @@
 // Date   : 24/02/2024
 
 using System;
+using System.Numerics;
 
 // Declaring all the classes required
 
@@ -37,16 +38,16 @@ public class Player
         switch (direction)
         {
             case 'U':
-                    Position = new Position(Position.X, Position.Y - 1);
+                Position = new Position(Position.X, Position.Y - 1);
                 break;
             case 'D':
-                    Position = new Position(Position.X, Position.Y + 1);
+                Position = new Position(Position.X, Position.Y + 1);
                 break;
             case 'L':
-                    Position = new Position(Position.X - 1, Position.Y);
+                Position = new Position(Position.X - 1, Position.Y);
                 break;
             case 'R':
-                    Position = new Position(Position.X + 1, Position.Y);
+                Position = new Position(Position.X + 1, Position.Y);
                 break;
             default:
                 break;
@@ -82,19 +83,20 @@ public class Board
                 {
                     cell.Occupant = "P2"; // Player 2 starts at bottom right corner
                 }
-                else if (rand.Next(10) < 2 && gemCount < 7)
-                {
-                    cell.Occupant = "O"; 
-                    gemCount++;
-                }
                 else if (rand.Next(10) < 2 && obstacleCount < 7)
                 {
-                    cell.Occupant = "G"; 
-                    obstacleCount++;
+                    cell.Occupant = "O";
+                    obstacleCount++; 
+                }
+                else if (rand.Next(10) < 2 && gemCount < 7)
+                {
+                    cell.Occupant = "G";
+                    gemCount++;
+
                 }
                 else
                 {
-                    cell.Occupant = "-"; 
+                    cell.Occupant = "-";
                 }
 
                 Grid[row, col] = cell;
@@ -127,7 +129,7 @@ public class Board
         // Calculate the new position based on the direction
         Position newPosition;
 
-        
+
         switch (direction)
         {
             case 'U':
@@ -150,7 +152,7 @@ public class Board
         {
             return false;
         }
-        if (Grid[newPosition.X, newPosition.Y].Occupant == "O")
+        if (Grid[newPosition.Y, newPosition.X].Occupant == "O")
         {
             return false;
         }
@@ -161,7 +163,7 @@ public class Board
 
 
     }
-        
+
 
 
     public void CollectGem(Player player)
@@ -197,7 +199,7 @@ public class Game
     public void Start()
     {
         Console.WriteLine("!!!! WELCOME TO GEM HUNTERS GAMEE !!!!\n");
-        while ( TotalTurns < 30 ) 
+        while (TotalTurns < 30)
         {
 
             Console.WriteLine("\nCurrent Board:");
@@ -226,6 +228,10 @@ public class Game
                 // Clear the current player's position on the board
                 ClearPlayerPosition(CurrentTurn);
                 CurrentTurn.Move(Board, move);
+                if (Board.Grid[CurrentTurn.Position.Y, CurrentTurn.Position.X].Occupant == "G")
+                {
+                    Board.CollectGem(CurrentTurn);
+                }
 
                 // Set the new player position on the board
                 SetPlayerPosition(CurrentTurn);
@@ -236,14 +242,14 @@ public class Game
                 continue;
             }
 
-            
+
             // Print Player positions
             Console.WriteLine($"\nPlayer {Player1.Name} Position: {Player1.Position.X},{Player1.Position.Y}");
             Console.WriteLine($"\nPlayer {Player2.Name} Position: {Player2.Position.X},{Player2.Position.Y}");
             //
 
-            
-            
+
+
 
             TotalTurns++;
 
