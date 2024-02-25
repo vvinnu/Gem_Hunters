@@ -32,26 +32,27 @@ public class Player
         GemCount = 0;
     }
 
-    public void Move(char direction)
+    public void Move(Board board, char direction)
     {
         switch (direction)
         {
             case 'U':
-                Position.Y--;
+                    Position = new Position(Position.X, Position.Y - 1);
                 break;
             case 'D':
-                Position.Y++;
+                    Position = new Position(Position.X, Position.Y + 1);
                 break;
             case 'L':
-                Position.X--;
+                    Position = new Position(Position.X - 1, Position.Y);
                 break;
             case 'R':
-                Position.X++;
+                    Position = new Position(Position.X + 1, Position.Y);
                 break;
             default:
                 break;
         }
     }
+
 }
 
 // Class to represent the Game Board
@@ -149,14 +150,15 @@ public class Board
         {
             return false;
         }
-
         if (Grid[newPosition.X, newPosition.Y].Occupant == "O")
         {
             return false;
         }
+        {
+            return true;
+        }
 
-        player.Position = newPosition;
-        return true;
+
 
     }
         
@@ -200,14 +202,33 @@ public class Game
 
             Console.WriteLine("\nCurrent Board:");
             Board.Display();
+            // Reset the board by clearing all player positions
+
+            // Set the new player positions on the board
+
 
             Console.WriteLine("\nTurn: " + (TotalTurns + 1));
             Console.WriteLine("\nCurrent Player: " + CurrentTurn.Name);
             Console.Write("\nEnter move (U/D/L/R): ");
             char move = char.ToUpper(Console.ReadKey().KeyChar);
+
+
+            // Print Player positions
+            Console.WriteLine($"\nPlayer {Player1.Name} Position: {Player1.Position.X},{Player1.Position.Y}");
+            Console.WriteLine($"\nPlayer {Player2.Name} Position: {Player2.Position.X},{Player2.Position.Y}");
+            //
+
+
+
             if (Board.IsValidMove(CurrentTurn, move))
             {
                 Console.WriteLine("\nMove successful!");
+                // Clear the current player's position on the board
+                ClearPlayerPosition(CurrentTurn);
+                CurrentTurn.Move(Board, move);
+
+                // Set the new player position on the board
+                SetPlayerPosition(CurrentTurn);
             }
             else
             {
@@ -215,13 +236,30 @@ public class Game
                 continue;
             }
 
-            CurrentTurn.Move(move);
+            
+            // Print Player positions
+            Console.WriteLine($"\nPlayer {Player1.Name} Position: {Player1.Position.X},{Player1.Position.Y}");
+            Console.WriteLine($"\nPlayer {Player2.Name} Position: {Player2.Position.X},{Player2.Position.Y}");
+            //
+
+            
+            
 
             TotalTurns++;
 
             SwitchTurn();
 
+
         }
+    }
+    private void ClearPlayerPosition(Player player)
+    {
+        Board.Grid[player.Position.Y, player.Position.X].Occupant = "-";
+    }
+
+    private void SetPlayerPosition(Player player)
+    {
+        Board.Grid[player.Position.Y, player.Position.X].Occupant = player.Name;
     }
 
     public void SwitchTurn()
