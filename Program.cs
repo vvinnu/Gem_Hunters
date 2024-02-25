@@ -59,15 +59,61 @@ public class Board
 {
     public Cell[,] Grid;
 
-    public Board()
+    public void board()
     {
         Grid = new Cell[6, 6];
+        Random rand = new Random();
+
+        int gemCount = 0;
+        int obstacleCount = 0;
+
+        for (int row = 0; row < 6; row++)
+        {
+            for (int col = 0; col < 6; col++)
+            {
+                Cell cell = new Cell();
+
+                if (row == 0 && col == 0)
+                {
+                    cell.Occupant = "P1"; // Player 1 starts at top left corner
+                }
+                else if (row == 5 && col == 5)
+                {
+                    cell.Occupant = "P2"; // Player 2 starts at bottom right corner
+                }
+                else if (rand.Next(10) < 2 && gemCount < 7)
+                {
+                    cell.Occupant = "O"; 
+                    gemCount++;
+                }
+                else if (rand.Next(10) < 2 && obstacleCount < 7)
+                {
+                    cell.Occupant = "G"; 
+                    obstacleCount++;
+                }
+                else
+                {
+                    cell.Occupant = "-"; 
+                }
+
+                Grid[row, col] = cell;
+            }
+        }
 
     }
 
     public void Display()
     {
+        for (int row = 0; row < 6; row++)
+        {
+            for (int col = 0; col < 6; col++)
+            {
+                string occupant = Grid[row, col].Occupant;
 
+                Console.Write(occupant.PadRight(3));
+            }
+            Console.WriteLine();
+        }
     }
 
     public bool IsValidMove(Player player, char direction)
@@ -131,5 +177,9 @@ class Program
     {
         Game gemHunters = new Game();
         gemHunters.Start();
+
+        Board init = new Board();
+        init.board();
+        init.Display();
     }
 }
