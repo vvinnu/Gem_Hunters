@@ -1,9 +1,6 @@
 ﻿// Author : Vineeth Kanoor
 // Date   : 24/02/2024
 
-using System;
-using System.Numerics;
-
 // Declaring all the classes required
 
 // Class to store the position on the board
@@ -86,7 +83,7 @@ public class Board
                 else if (rand.Next(10) < 2 && obstacleCount < 7)
                 {
                     cell.Occupant = "O";
-                    obstacleCount++; 
+                    obstacleCount++;
                 }
                 else if (rand.Next(10) < 2 && gemCount < 7)
                 {
@@ -168,7 +165,15 @@ public class Board
 
     public void CollectGem(Player player)
     {
-        // Check if the player's new position contains a gem and update GemCount
+
+        Position playerPosition = player.Position;
+
+        player.GemCount++;
+
+        // Print a message indicating that the gem has been collected
+        Console.WriteLine($"Player {player.Name} collected a gem! Total gems: {player.GemCount}");
+
+
     }
 }
 
@@ -232,9 +237,10 @@ public class Game
                 {
                     Board.CollectGem(CurrentTurn);
                 }
-
                 // Set the new player position on the board
                 SetPlayerPosition(CurrentTurn);
+
+
             }
             else
             {
@@ -254,9 +260,11 @@ public class Game
             TotalTurns++;
 
             SwitchTurn();
-
+            IsGameOver();
+            AnnounceWinner();
 
         }
+
     }
     private void ClearPlayerPosition(Player player)
     {
@@ -280,15 +288,31 @@ public class Game
         }
     }
 
-    public bool IsGameOver()
+    public void IsGameOver()
     {
-
-        return true;
+        Console.Write("Game Over!");
     }
 
     public void AnnounceWinner()
     {
+        {
 
+            Console.WriteLine($"Player {Player1.Name} total gems: {Player1.GemCount}");
+            Console.WriteLine($"Player {Player2.Name} total gems: {Player2.GemCount}");
+
+            if (Player1.GemCount > Player2.GemCount)
+            {
+                Console.WriteLine($"Player {Player1.Name} wins!");
+            }
+            else if (Player1.GemCount < Player2.GemCount)
+            {
+                Console.WriteLine($"Player {Player2.Name} wins!");
+            }
+            else
+            {
+                Console.WriteLine("It's a tie!");
+            }
+        }
     }
 }
 
