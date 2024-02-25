@@ -155,6 +155,11 @@ public class Board
         {
             return false;
         }
+        // Checking if the new position is occupied by the other player
+        if (Grid[newPosition.Y, newPosition.X].Occupant == "P1" || Grid[newPosition.Y, newPosition.X].Occupant == "P2")
+        {
+            return false;
+        }
         // if all the above conditions failed , then it is a valid move 
         return true;
  
