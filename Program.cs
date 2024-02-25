@@ -59,7 +59,7 @@ public class Board
 {
     public Cell[,] Grid;
 
-    public void board()
+    public Board()
     {
         Grid = new Cell[6, 6];
         Random rand = new Random();
@@ -97,11 +97,13 @@ public class Board
                 }
 
                 Grid[row, col] = cell;
+
             }
         }
 
     }
 
+    // Method to display the current state of the board
     public void Display()
     {
         for (int row = 0; row < 6; row++)
@@ -118,9 +120,36 @@ public class Board
 
     public bool IsValidMove(Player player, char direction)
     {
+        // Get the current position of the player
+        Position currentPosition = player.Position;
 
+        // Calculate the new position based on the direction
+        Position newPosition;
+
+        
+        switch (direction)
+        {
+            case 'U':
+                newPosition = new Position(currentPosition.X, currentPosition.Y - 1);
+                break;
+            case 'D':
+                newPosition = new Position(currentPosition.X, currentPosition.Y + 1);
+                break;
+            case 'L':
+                newPosition = new Position(currentPosition.X - 1, currentPosition.Y);
+                break;
+            case 'R':
+                newPosition = new Position(currentPosition.X + 1, currentPosition.Y);
+                break;
+            default:
+                // Invalid direction
+                return false;
+        }
         return true;
+
     }
+        
+
 
     public void CollectGem(Player player)
     {
@@ -145,12 +174,12 @@ public class Game
 
     public Game()
     {
-
+        Board = new Board();
     }
 
     public void Start()
     {
-
+        Board.Display();
     }
 
     public void SwitchTurn()
@@ -178,8 +207,5 @@ class Program
         Game gemHunters = new Game();
         gemHunters.Start();
 
-        Board init = new Board();
-        init.board();
-        init.Display();
     }
 }
