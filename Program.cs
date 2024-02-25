@@ -1,7 +1,6 @@
 ﻿// Author : Vineeth Kanoor
 // Date   : 24/02/2024
 
-// Declaring all the classes required
 
 // Class to store the position on the board
 public class Position
@@ -29,7 +28,7 @@ public class Player
         Position = position;
         GemCount = 0;
     }
-
+    //Method to move the player position based on user input validation
     public void Move(Board board, char direction)
     {
         switch (direction)
@@ -60,12 +59,14 @@ public class Board
 
     public Board()
     {
+        //Initializing the game board with random Gems and Obstacles
         Grid = new Cell[6, 6];
         Random rand = new Random();
 
         int gemCount = 0;
         int obstacleCount = 0;
 
+        //Creating 6*6 Game Board
         for (int row = 0; row < 6; row++)
         {
             for (int col = 0; col < 6; col++)
@@ -82,18 +83,17 @@ public class Board
                 }
                 else if (rand.Next(10) < 2 && obstacleCount < 7)
                 {
-                    cell.Occupant = "O";
+                    cell.Occupant = "O"; // Random number of obstacles placed on the board , maximum of 7 obstacles
                     obstacleCount++;
                 }
                 else if (rand.Next(10) < 2 && gemCount < 7)
                 {
-                    cell.Occupant = "G";
+                    cell.Occupant = "G"; // Random number of gems placed on the board , maximum of 7 gems
                     gemCount++;
-
                 }
                 else
                 {
-                    cell.Occupant = "-";
+                    cell.Occupant = "-"; // Remaining positions are displayed by -
                 }
 
                 Grid[row, col] = cell;
@@ -103,7 +103,7 @@ public class Board
 
     }
 
-    // Method to display the current state of the board
+    // Method to display the current state of the board for each turn
     public void Display()
     {
         for (int row = 0; row < 6; row++)
@@ -118,6 +118,7 @@ public class Board
         }
     }
 
+    // Method to check if the user move is valid or not
     public bool IsValidMove(Player player, char direction)
     {
         // Get the current position of the player
@@ -126,7 +127,7 @@ public class Board
         // Calculate the new position based on the direction
         Position newPosition;
 
-
+        // Set the new position indexes based on user input
         switch (direction)
         {
             case 'U':
@@ -142,27 +143,24 @@ public class Board
                 newPosition = new Position(currentPosition.X + 1, currentPosition.Y);
                 break;
             default:
-                // Invalid direction
                 return false;
         }
+        // Checking if the new position goes out of the 6*6 Matrix
         if (newPosition.X < 0 || newPosition.X >= 6 || newPosition.Y < 0 || newPosition.Y >= 6)
         {
             return false;
         }
+        // Checking if the new position has an obstacle
         if (Grid[newPosition.Y, newPosition.X].Occupant == "O")
         {
             return false;
         }
-        {
-            return true;
-        }
-
-
-
+        // if all the above conditions failed , then it is a valid move 
+        return true;
+ 
     }
 
-
-
+    // Method to store the gems count collected by the user
     public void CollectGem(Player player)
     {
 
@@ -201,46 +199,38 @@ public class Game
 
     }
 
+    // Game starts here in this method
     public void Start()
     {
         Console.WriteLine("!!!! WELCOME TO GEM HUNTERS GAMEE !!!!\n");
         while (TotalTurns < 30)
         {
-
+            // Display current board initially and updated board after each turn
             Console.WriteLine("\nCurrent Board:");
             Board.Display();
-            // Reset the board by clearing all player positions
-
-            // Set the new player positions on the board
-
 
             Console.WriteLine("\nTurn: " + (TotalTurns + 1));
             Console.WriteLine("\nCurrent Player: " + CurrentTurn.Name);
             Console.Write("\nEnter move (U/D/L/R): ");
             char move = char.ToUpper(Console.ReadKey().KeyChar);
 
-
-            // Print Player positions
-            Console.WriteLine($"\nPlayer {Player1.Name} Position: {Player1.Position.X},{Player1.Position.Y}");
-            Console.WriteLine($"\nPlayer {Player2.Name} Position: {Player2.Position.X},{Player2.Position.Y}");
-            //
-
-
-
+            // Calling IsValidMove method to verify the user input and update the position accordingly
             if (Board.IsValidMove(CurrentTurn, move))
             {
-                Console.WriteLine("\nMove successful!");
+                Console.WriteLine("\n\nMove successful!");
                 // Clear the current player's position on the board
                 ClearPlayerPosition(CurrentTurn);
+                // Calling Move method to update the player index
                 CurrentTurn.Move(Board, move);
+
+                // Calling the CollectGem method if there is a gem in the new position
                 if (Board.Grid[CurrentTurn.Position.Y, CurrentTurn.Position.X].Occupant == "G")
                 {
                     Board.CollectGem(CurrentTurn);
                 }
+
                 // Set the new player position on the board
                 SetPlayerPosition(CurrentTurn);
-
-
             }
             else
             {
@@ -248,29 +238,22 @@ public class Game
                 continue;
             }
 
-
-            // Print Player positions
-            Console.WriteLine($"\nPlayer {Player1.Name} Position: {Player1.Position.X},{Player1.Position.Y}");
-            Console.WriteLine($"\nPlayer {Player2.Name} Position: {Player2.Position.X},{Player2.Position.Y}");
-            //
-
-
-
-
             TotalTurns++;
-
+            
+            // Calling Switch method to turn between the players P1 and P2
             SwitchTurn();
-            IsGameOver();
-            AnnounceWinner();
 
         }
 
     }
+
+    // Temporary method created to replace the previous player position with "-"
     private void ClearPlayerPosition(Player player)
     {
         Board.Grid[player.Position.Y, player.Position.X].Occupant = "-";
     }
 
+    // Temporary method created to update the P1,P2 position to display on the output after each turn
     private void SetPlayerPosition(Player player)
     {
         Board.Grid[player.Position.Y, player.Position.X].Occupant = player.Name;
@@ -290,14 +273,14 @@ public class Game
 
     public void IsGameOver()
     {
-        Console.Write("Game Over!");
+        Console.WriteLine("Game Over!");
     }
 
     public void AnnounceWinner()
     {
         {
 
-            Console.WriteLine($"Player {Player1.Name} total gems: {Player1.GemCount}");
+            Console.WriteLine($"\n\nPlayer {Player1.Name} total gems: {Player1.GemCount}");
             Console.WriteLine($"Player {Player2.Name} total gems: {Player2.GemCount}");
 
             if (Player1.GemCount > Player2.GemCount)
@@ -306,7 +289,7 @@ public class Game
             }
             else if (Player1.GemCount < Player2.GemCount)
             {
-                Console.WriteLine($"Player {Player2.Name} wins!");
+                Console.WriteLine($"Player {Player2.Name} wins!. Congratulations");
             }
             else
             {
@@ -323,6 +306,13 @@ class Program
     {
         Game gemHunters = new Game();
         gemHunters.Start();
+
+        // Check if the game is over and announce the winner
+        if (gemHunters.TotalTurns == 30)
+        {
+            gemHunters.IsGameOver();
+            gemHunters.AnnounceWinner();
+        }
 
     }
 }
