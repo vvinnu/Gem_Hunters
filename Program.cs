@@ -170,21 +170,50 @@ public class Game
     public Player Player1;
     public Player Player2;
     public Player CurrentTurn;
-    public int TotalTurns;
+    public int TotalTurns = 0;
 
     public Game()
     {
         Board = new Board();
+        Player1 = new Player("P1", new Position(0, 0));
+        Player2 = new Player("P2", new Position(5, 5));
+        CurrentTurn = Player1;
+
     }
 
     public void Start()
     {
-        Board.Display();
+        Console.WriteLine("!!!! WELCOME TO GEM HUNTERS GAMEE !!!!\n");
+        while ( TotalTurns < 30 ) 
+        {
+
+            Console.WriteLine("\nCurrent Board:");
+            Board.Display();
+
+            Console.WriteLine("\nTurn: " + (TotalTurns + 1));
+            Console.WriteLine("\nCurrent Player: " + CurrentTurn.Name);
+            Console.Write("\nEnter move (U/D/L/R): ");
+            char move = char.ToUpper(Console.ReadKey().KeyChar);
+            Board.IsValidMove(CurrentTurn,move);
+            CurrentTurn.Move(move);
+
+            TotalTurns++;
+
+            SwitchTurn();
+
+        }
     }
 
     public void SwitchTurn()
     {
-
+        if (CurrentTurn == Player1)
+        {
+            CurrentTurn = Player2;
+        }
+        else
+        {
+            CurrentTurn = Player1;
+        }
     }
 
     public bool IsGameOver()
