@@ -207,7 +207,7 @@ public class Game
     // Game starts here in this method
     public void Start()
     {
-        Console.WriteLine("!!!! WELCOME TO GEM HUNTERS GAMEE !!!!\n");
+        Console.WriteLine("!!!! WELCOME TO GEM HUNTERS GAME !!!!\n");
         while (TotalTurns < 30)
         {
             // Display current board initially and updated board after each turn
