@@ -6,7 +6,7 @@ Author : Vineeth Kanoor
 
 Date : 24 - Feb -2024
 
-Output Video Links through Youtubw
+Output Video Links through Youtube
 
 Gem Collector Output - One Winner Scenario
 
