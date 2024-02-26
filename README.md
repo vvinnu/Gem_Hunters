@@ -6,3 +6,12 @@ Author : Vineeth Kanoor
 
 Date : 24 - Feb -2024
 
+Output Video Links through Youtubw
+
+Gem Collector Output - One Winner Scenario
+
+https://youtu.be/GW_9vfnD6-8
+
+Gem Collector Output - Game Tie Scenario
+
+https://youtu.be/J3JK0InunKM
